@@ -1,0 +1,187 @@
+[
+  {
+    "id": "home",
+    "path": "/",
+    "html": "index.html",
+    "input": "main",
+    "priority": "1.0",
+    "updated": "2026-10-19"
+  },
+  {
+    "id": "base64-to-file",
+    "path": "/base64-to-file/",
+    "html": "base64-to-file/index.html",
+    "input": "toFile",
+    "priority": "0.9",
+    "updated": "2026-10-19"
+  },
+  {
+    "id": "file-to-base64",
+    "path": "/file-to-base64/",
+    "html": "file-to-base64/index.html",
+    "input": "fromFile",
+    "priority": "0.9",
+    "updated": "2026-10-19"
+  },
+  {
+    "id": "base64-to-image",
+    "path": "/base64-to-image/",
+    "html": "base64-to-image/index.html",
+    "input": "toImage",
+    "priority": "0.8",
+    "updated": "2026-10-19"
+  },
+  {
+    "id": "image-to-base64",
+    "path": "/image-to-base64/",
+    "html": "image-to-base64/index.html",
+    "input": "fromImage",
+    "priority": "0.8",
+    "updated": "2026-10-19"
+  },
+  {
+    "id": "base64-to-pdf",
+    "path": "/base64-to-pdf/",
+    "html": "base64-to-pdf/index.html",
+    "input": "toPdf",
+    "priority": "0.8",
+    "updated": "2026-10-19"
+  },
+  {
+    "id": "pdf-to-base64",
+    "path": "/pdf-to-base64/",
+    "html": "pdf-to-base64/index.html",
+    "input": "fromPdf",
+    "priority": "0.8",
+    "updated": "2026-10-19"
+  },
+  {
+    "id": "base64-decode-errors",
+    "path": "/base64-decode-errors/",
+    "html": "base64-decode-errors/index.html",
+    "input": "decodeErrors",
+    "priority": "0.7",
+    "updated": "2026-10-19"
+  },
+  {
+    "id": "json-to-file",
+    "path": "/json-to-file/",
+    "html": "json-to-file/index.html",
+    "input": "jsonToFile",
+    "priority": "0.8",
+    "updated": "2026-10-19"
+  },
+  {
+    "id": "base64-to-word",
+    "path": "/base64-to-word/",
+    "html": "base64-to-word/index.html",
+    "input": "toWord",
+    "priority": "0.8",
+    "updated": "2026-10-19"
+  },
+  {
+    "id": "base64-to-excel",
+    "path": "/base64-to-excel/",
+    "html": "base64-to-excel/index.html",
+    "input": "toExcel",
+    "priority": "0.8",
+    "updated": "2026-10-19"
+  },
+  {
+    "id": "base64url",
+    "path": "/base64url/",
+    "html": "base64url/index.html",
+    "input": "base64url",
+    "priority": "0.7",
+    "updated": "2026-10-19"
+  },
+  {
+    "id": "base64-to-pptx",
+    "path": "/base64-to-pptx/",
+    "html": "base64-to-pptx/index.html",
+    "input": "toPptx",
+    "priority": "0.8",
+    "updated": "2026-10-19"
+  },
+  {
+    "id": "base64-to-text",
+    "path": "/base64-to-text/",
+    "html": "base64-to-text/index.html",
+    "input": "toText",
+    "priority": "0.8",
+    "updated": "2026-10-19"
+  },
+  {
+    "id": "base64-to-svg",
+    "path": "/base64-to-svg/",
+    "html": "base64-to-svg/index.html",
+    "input": "base64_to_svg",
+    "priority": "0.8",
+    "updated": "2026-10-19"
+  },
+  {
+    "id": "base64-to-mp3",
+    "path": "/base64-to-mp3/",
+    "html": "base64-to-mp3/index.html",
+    "input": "base64_to_mp3",
+    "priority": "0.8",
+    "updated": "2026-10-19"
+  },
+  {
+    "id": "base64-to-txt",
+    "path": "/base64-to-txt/",
+    "html": "base64-to-txt/index.html",
+    "input": "base64_to_txt",
+    "priority": "0.7",
+    "updated": "2026-10-19"
+  },
+  {
+    "id": "data-url",
+    "path": "/data-url/",
+    "html": "data-url/index.html",
+    "input": "data_url",
+    "priority": "0.8",
+    "updated": "2026-10-19"
+  },
+  {
+    "id": "jwt-decode",
+    "path": "/jwt-decode/",
+    "html": "jwt-decode/index.html",
+    "input": "jwt_decode",
+    "priority": "0.8",
+    "updated": "2026-10-19"
+  },
+  {
+    "id": "privacy",
+    "path": "/privacy/",
+    "html": "privacy/index.html",
+    "input": "privacy",
+    "priority": "0.3",
+    "updated": "2026-10-19"
+  },
+  {
+    "id": "about",
+    "path": "/about/",
+    "html": "about/index.html",
+    "input": "about",
+    "priority": "0.4",
+    "updated": "2026-10-19"
+  },
+  {
+    "id": "terms",
+    "path": "/terms/",
+    "html": "terms/index.html",
+    "input": "terms",
+    "priority": "0.3",
+    "updated": "2026-10-19"
+  },
+  {
+    "id": "404",
+    "path": "/404.html",
+    "html": "404.html",
+    "input": "notFound",
+    "priority": "0.1",
+    "updated": "2026-10-19",
+    "hide": true
+  }
+]
