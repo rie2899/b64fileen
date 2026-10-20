@@ -8,8 +8,8 @@
   "redirects": [
     {
       "source": "/:path*",
-      "has": [{ "type": "host", "value": "www.REPLACE-WITH-DOMAIN.com" }],
-      "destination": "https://REPLACE-WITH-DOMAIN.com/:path*",
+      "has": [{ "type": "host", "value": "www.b64file.com" }],
+      "destination": "https://b64file.com/:path*",
       "permanent": true
     }
   ],
