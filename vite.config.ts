@@ -25,6 +25,19 @@ const siteConfig = JSON.parse(readFileSync('site.config.json', 'utf8')) as {
   zhSiteUrl?: string;
 };
 const pageByHtml = new Map<string, PageId>(pageRegistry.map((p) => [`/${p.html}`, p.id]));
+
+/**
+ * Vercel Web Analytics + Speed Insights：静态站没有框架，用官方推荐的脚本直插方式。
+ * 两个脚本由 Vercel 边缘按项目开关提供，不需要打包进 bundle（所以 defer 放在 head 末尾）。
+ * 脚本路径在未开启对应功能时返回 404，页面不会因此报错或阻塞渲染。
+ */
+const analyticsTags = (): string =>
+  [
+    '<!-- Vercel Web Analytics（无 cookie，不需要同意横幅） -->',
+    '<script defer src="/_vercel/insights/script.js"></script>',
+    '<!-- Vercel Speed Insights（真实访客的 LCP/CLS/INP） -->',
+    '<script defer src="/_vercel/speed-insights/script.js"></script>'
+  ].join('\n    ');
 const input = Object.fromEntries(pageRegistry.map((p) => [p.input, resolve(__dirname, p.html)]));
 
 export default defineConfig({
@@ -36,7 +49,7 @@ export default defineConfig({
         return html
           .replace('<div id="app"></div>', `<div id="app">${renderShell(page)}</div>`)
           .replace(/<title>.*?<\/title>\s*<meta name="description" content=".*?" \/>/s, metaTags(page))
-          .replace('</head>', `${canonicalTag(page)}${hreflangTags(page)}${jsonLdScript(page)}</head>`);
+          .replace('</head>', `${canonicalTag(page)}${hreflangTags(page)}${analyticsTags()}${jsonLdScript(page)}</head>`);
       },
       // llms.txt: a plain-text summary of the site for AI search / generative engines (GEO).
       // It is regenerated on every build, so it never drifts from the actual pages.
