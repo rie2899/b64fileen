@@ -1011,6 +1011,7 @@ export function renderShell(currentPage: PageId): string {
       ${crumbs}
       ${hero(currentPage)}
       ${showTool ? toolCard(currentPage) : ''}
+      ${currentPage === 'home' ? toolsIndex() : ''}
       ${contentSections(currentPage)}
       ${d.faqs.length ? faqSection(currentPage) : ''}
       ${currentPage !== '404' ? relatedLinks(currentPage) : ''}
@@ -1121,6 +1122,39 @@ function toolCard(page: PageId): string {
       </div>
 
       <p class="local-note">Paste, drag and drop, or Ctrl+V a screenshot</p>
+    </section>
+  `;
+}
+
+/** Titles for the homepage index groups (order = display order). */
+const INDEX_GROUP_TITLE: Array<{ group: PageGroup; title: string }> = [
+  { group: 'decode', title: 'Base64 to file' },
+  { group: 'encode', title: 'File to Base64' },
+  { group: 'text', title: 'Text and tokens' },
+  { group: 'guide', title: 'Errors and guides' }
+];
+
+/**
+ * Homepage tool index: every tool page as a plain static link, built once at build time.
+ * Not a navigation nicety — crawlers need one hop from the homepage to every landing page,
+ * and the header only ever linked five of them.
+ */
+function toolsIndex(): string {
+  const ids = Object.keys(PAGE_GROUP).filter((id) => PAGE_GROUP[id] !== 'info' && PAGE_GROUP[id] !== 'home');
+  const groups = INDEX_GROUP_TITLE.map(({ group, title }) => {
+    const items = ids
+      .filter((id) => PAGE_GROUP[id] === group && SHORT_LABEL[id])
+      .map((id) => `<li><a href="${pagePaths[id] ?? '/'}">${SHORT_LABEL[id]}</a></li>`)
+      .join('\n            ');
+    return `<div class="tool-group">\n          <h3>${title}</h3>\n          <ul>\n            ${items}\n          </ul>\n        </div>`;
+  }).join('\n        ');
+  return `
+    <section class="section tool-index">
+      <h2>All ${ids.length} tools</h2>
+      <p class="muted">One engine, four ways to use it. Free, no sign-up, and every file is decoded in your browser — nothing is uploaded.</p>
+      <div class="tool-grid">
+        ${groups}
+      </div>
     </section>
   `;
 }

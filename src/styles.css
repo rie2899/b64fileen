@@ -990,3 +990,54 @@ summary::after { transition: transform 0.12s steps(2); }
 
 /* 页脚备案行：ICP + 公安备案，同一行、窄屏可换行 */
 .footer-filings { display: flex; flex-wrap: wrap; justify-content: center; gap: 0 2px; }
+
+/* ---------- Homepage tool index: full internal link map for crawlers ---------- */
+.tool-index .tool-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 18px 32px;
+  margin-top: 20px;
+}
+
+.tool-index .tool-group {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px 12px;
+}
+
+.tool-index .tool-group h3 {
+  font-size: 15px;
+  margin: 0 0 10px;
+  color: var(--accent-strong);
+  letter-spacing: 0.2px;
+}
+
+.tool-index .tool-group ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+}
+
+.tool-index .tool-group li { margin: 0; }
+
+.tool-index .tool-group a {
+  font-size: 14.5px;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.tool-index .tool-group a:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+@media (max-width: 640px) {
+  .tool-index .tool-grid { grid-template-columns: 1fr; gap: 14px; }
+}
