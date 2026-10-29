@@ -1016,7 +1016,7 @@ export function renderShell(currentPage: PageId): string {
       ${d.faqs.length ? faqSection(currentPage) : ''}
       ${currentPage !== '404' ? relatedLinks(currentPage) : ''}
     </main>
-    ${footer()}
+    ${footer(currentPage)}
   `;
 }
 
@@ -1301,9 +1301,35 @@ function relatedLinks(currentPage: PageId): string {
   `;
 }
 
-function footer(): string {
+/** Footer cluster links: the two pages each group should send readers to next. */
+const FOOTER_CLUSTER: Record<PageGroup, string[]> = {
+  decode: ['/base64-to-pdf/', '/base64-to-word/'],
+  encode: ['/pdf-to-base64/', '/image-to-base64/'],
+  text: ['/base64url/', '/jwt-decode/'],
+  guide: ['/base64url/', '/data-url/'],
+  info: [],
+  home: []
+};
+
+function footer(currentPage: PageId): string {
   const year = new Date().getFullYear();
   const host = siteUrl().replace(/^https?:\/\//, '').replace(/\/$/, '');
+  // Legal pages are reachable from the home page only. Linking them from every page
+  // spent a third of the site's internal links on pages that will never rank.
+  const legal =
+    currentPage === 'home'
+      ? `<a href="/about/">About</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="/terms/">Terms</a>`
+      : `<span class="footer-legal">About · Privacy · Terms</span>`;
+  const clusterRows: string[] = [];
+  for (const path of FOOTER_CLUSTER[PAGE_GROUP[currentPage] ?? 'info'] ?? []) {
+    const hit = pageRegistry.find((x) => x.path === path);
+    if (hit && hit.id !== currentPage) {
+      clusterRows.push(`<a href="${hit.path}">${SHORT_LABEL[hit.id] ?? hit.id}</a>`);
+    }
+  }
+  const clusterLinks = clusterRows.join('\n        ');
   return `
     <footer class="footer">
       <div class="footer-brand">
@@ -1321,11 +1347,10 @@ function footer(): string {
         <a href="/base64-decode-errors/">Decode errors</a>
       </div>
       <div class="footer-links">
-        <a href="/about/">About</a>
-        <a href="/privacy/">Privacy</a>
-        <a href="/terms/">Terms</a>
+        ${legal}
         <a href="mailto:${FEEDBACK_EMAIL}">Feedback ${FEEDBACK_EMAIL}</a>
       </div>
+      ${clusterLinks ? `<div class="footer-links">\n        ${clusterLinks}\n      </div>` : ''}
       <p class="muted">© ${year} ${host || BRAND} · Base64 is an encoding, not encryption — never use it to protect sensitive data</p>
     </footer>
   `;

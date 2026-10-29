@@ -709,6 +709,10 @@ details p { margin: 0; padding: 0 16px 14px; font-size: 14.5px; }
   font-size: 13px;
 }
 
+.footer-legal {
+  color: var(--muted, #8a8681);
+}
+
 .footer .muted { font-size: 12.5px; margin: 8px 0 24px; }
 
 /* tmux-style status bar */
