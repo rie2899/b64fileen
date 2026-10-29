@@ -2,19 +2,20 @@ import pageRegistry from '../page-registry.json';
 import { BRAND, DEFAULT_SITE_URL, FEEDBACK_EMAIL, ZH_SITE_URL } from './site-config';
 
 export type PageId = string;
+import { guidePages } from './guide-pages';
 export type ToolMode = 'to-file' | 'to-base64' | 'text';
 
-interface Faq {
+export interface Faq {
   q: string;
   a: string;
 }
 
-interface Section {
+export interface Section {
   h2: string;
   html: string;
 }
 
-interface PageContent {
+export interface PageContent {
   title: string;
   desc: string;
   h1: string;
@@ -976,7 +977,10 @@ export const pageData: Record<PageId, PageContent> = {
     mode: 'to-file',
     sections: [],
     faqs: []
-  }
+  },
+
+  // Long-form guide pages live in their own module to keep this file readable.
+  ...guidePages
 };
 
 function escapeHtml(s: string): string {
@@ -1198,6 +1202,9 @@ const SHORT_LABEL: Record<string, string> = {
   'data-url': 'Data URL',
   'jwt-decode': 'JWT decoder',
   'base64-decode-errors': 'Decode errors',
+  'what-is-base64': 'What is Base64',
+  'base64-vs-encryption': 'Base64 vs encryption',
+  'how-to-decode-base64-in-javascript': 'Decode in JavaScript',
   about: 'About',
   privacy: 'Privacy',
   terms: 'Terms'
@@ -1229,6 +1236,9 @@ const PAGE_GROUP: Record<string, PageGroup> = {
   'image-to-base64': 'encode',
   'pdf-to-base64': 'encode',
   'base64-decode-errors': 'guide',
+  'what-is-base64': 'guide',
+  'base64-vs-encryption': 'guide',
+  'how-to-decode-base64-in-javascript': 'guide',
   about: 'info',
   privacy: 'info',
   terms: 'info'

@@ -176,6 +176,30 @@
     "updated": "2026-10-19"
   },
   {
+    "id": "what-is-base64",
+    "path": "/what-is-base64/",
+    "html": "what-is-base64/index.html",
+    "input": "whatIsBase64",
+    "priority": "0.7",
+    "updated": "2026-10-29"
+  },
+  {
+    "id": "base64-vs-encryption",
+    "path": "/base64-vs-encryption/",
+    "html": "base64-vs-encryption/index.html",
+    "input": "base64VsEncryption",
+    "priority": "0.7",
+    "updated": "2026-10-29"
+  },
+  {
+    "id": "how-to-decode-base64-in-javascript",
+    "path": "/how-to-decode-base64-in-javascript/",
+    "html": "how-to-decode-base64-in-javascript/index.html",
+    "input": "decodeInJs",
+    "priority": "0.7",
+    "updated": "2026-10-29"
+  },
+  {
     "id": "404",
     "path": "/404.html",
     "html": "404.html",
