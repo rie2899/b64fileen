@@ -440,5 +440,86 @@ worker.onmessage = (e) =&gt; {
         a: 'Open DevTools → Network, switch to the Fetch/XHR filter and paste a file. No request carries the payload. The site is a static bundle; there is no backend to receive it.'
       }
     ]
+  },
+  'base64-data-uri-pitfalls': {
+    title: 'Five Things That Break When You Inline Base64 (and How to Check Each One)',
+    desc: 'Data URIs look like a free optimisation and are usually not. Five failure modes — the 33% tax, MIME mismatches, truncation, UTF-8 mojibake and CSP — with the check that catches each one.',
+    h1: 'Five Ways Inlined Base64 Breaks',
+    answer:
+      'Inlining Base64 fails in five predictable places: the payload is a third larger than the file it replaces and stops being cacheable; the declared MIME type overrides the real bytes; line breaks and stripped padding break the decode; <code>atob</code> mangles anything that is not Latin-1; and a Content-Security-Policy without <code>data:</code> blocks the resource silently. Each has a one-line check.',
+    mode: 'text',
+    quick: [
+      'Base64 is 33 percent larger and cannot be cached separately from the file that carries it',
+      'Browsers trust the MIME type in the data URI — not the bytes behind it',
+      'Whitespace inside the string and missing <code>=</code> padding both throw',
+      '<code>btoa</code> throws on any character above U+00FF; <code>atob</code> returns mojibake for UTF-8',
+      'CSP needs <code>img-src data:</code> or <code>font-src data:</code> — otherwise it fails with no error'
+    ],
+    sections: [
+      {
+        h2: '1. The 33 percent tax, and the cache you lose',
+        html: `<p>Four Base64 characters carry three bytes, so every inlined asset is about a third larger than the file. That alone is survivable. The real cost is that the payload now lives inside your CSS or HTML: it is re-sent whenever that file is not cached, it cannot be cached on its own, and it blocks the document behind it.</p>
+        <p>A 30 KB font inlined in the main stylesheet turns a 40 KB CSS file into an 80 KB one that must arrive in full before anything renders. The same font as a separate file downloads in parallel and is cached for a year.</p>
+        <p><strong>Check:</strong> compare gzipped transfer size of "CSS with the asset inlined" against "CSS + separate file" in DevTools → Network, with cache disabled. Below roughly 2–3 KB the inline wins; above 10 KB it almost never does.</p>`
+      },
+      {
+        h2: '2. The declared MIME type overrides the real bytes',
+        html: `<p>A data URI states its type: <code>data:image/png;base64,...</code>. The browser believes that label. Encode a WebP, label it PNG, and Chrome renders nothing — with no console error, because as far as the parser is concerned the image is simply corrupt.</p>
+        <p>Fonts are worse, because the failure is silent in a different way: a TrueType file served as <code>font/woff2</code> may load in one browser and be rejected in another.</p>
+        <p><strong>Check:</strong> read the first bytes before trusting the label — <code>89 50 4E 47</code> is PNG, <code>RIFF….WEBP</code> is WebP, <code>wOF2</code> is WOFF2, <code>00 01 00 00</code> is raw TrueType. The <a href="/base64-to-file/">decoder</a> here does exactly that check and names the format it finds.</p>`
+      },
+      {
+        h2: '3. Whitespace and stripped padding',
+        html: `<p>Base64 that has travelled through email, a YAML file or a chat window often carries line breaks every 76 characters. <code>atob</code> throws on those. The same string with newlines removed may then fail because padding was stripped to save two bytes, and the length is no longer a multiple of four.</p>
+        <pre><code>const clean = value.replace(/^data:[^;]+;base64,/, '').replace(/\\s+/g, '');
+const standard = clean.replace(/-/g, '+').replace(/_/g, '/');
+const padded = standard + '='.repeat((4 - (standard.length % 4)) % 4);</code></pre>
+        <p><strong>Check:</strong> strip whitespace, normalise the URL-safe alphabet, restore padding — in that order. If it still throws, the string was truncated in transit; a length that is not a multiple of four after cleaning is the tell.</p>`
+      },
+      {
+        h2: '4. UTF-8: btoa throws, atob mangles',
+        html: `<p><code>btoa</code> accepts only characters U+0000–U+00FF. Pass it anything with an accent, an emoji or a Chinese character and it throws <code>InvalidCharacterError</code>. Go the other way and <code>atob</code> happily returns a "string" that is really raw bytes, so <code>é</code> and 中文 arrive as mojibake.</p>
+        <pre><code>// encode
+const bytes = new TextEncoder().encode(text);
+const b64 = btoa(String.fromCharCode(...bytes)); // loop for large input
+
+// decode
+const out = new TextDecoder('utf-8').decode(
+  Uint8Array.from(atob(b64), (c) =&gt; c.charCodeAt(0))
+);</code></pre>
+        <p><strong>Check:</strong> round-trip a string containing an emoji and a CJK character. If either comes back changed, the code is treating bytes as Latin-1 text.</p>`
+      },
+      {
+        h2: '5. Content-Security-Policy blocks it silently',
+        html: `<p>A policy written as <code>img-src 'self'</code> blocks every <code>data:</code> image, and <code>font-src 'self'</code> blocks inlined fonts. The browser reports a CSP violation in the console and renders nothing else — which is easy to miss in a build where the CSS came from a bundler and nobody wrote a data URI by hand.</p>
+        <p><strong>Check:</strong> open the console and filter for "Refused to load". If your build step inlines assets, the policy needs <code>data:</code> in <code>img-src</code>, <code>font-src</code> and sometimes <code>style-src</code>.</p>`
+      },
+      {
+        h2: 'The checklist before you inline anything',
+        html: `<ul>
+          <li>Under 3 KB and used once on the page? Inline it.</li>
+          <li>Over 10 KB, or reused across pages? Serve it as a file with a cache header.</li>
+          <li>Does the declared MIME type match the first bytes? Verify, do not assume.</li>
+          <li>Did the string survive transport? Strip whitespace, restore padding, check <code>length % 4</code>.</li>
+          <li>Does any text pass through <code>atob</code>/<code>btoa</code>? Use <code>TextEncoder</code>/<code>TextDecoder</code>.</li>
+          <li>Does the CSP allow <code>data:</code> for that resource type?</li>
+          <li>Is the asset a font? Check the licence before embedding it at all.</li>
+        </ul>`
+      }
+    ],
+    faqs: [
+      {
+        q: 'Is inlining Base64 ever faster?',
+        a: 'Yes, for small assets used immediately above the fold, where removing one request matters more than the extra bytes. The break-even is usually between 2 and 4 KB gzipped; measure it rather than guessing.'
+      },
+      {
+        q: 'Why does my image data URI render as a broken icon?',
+        a: 'Usually a MIME mismatch or a truncated string. Check the first bytes and the length — both are covered by the <a href="/base64-to-file/">general decoder</a>.'
+      },
+      {
+        q: 'Does a data URI affect SEO?',
+        a: 'Indirectly. It increases HTML size and blocks rendering, both of which show up in Core Web Vitals. Search engines have no problem reading data URIs, but they cannot index an inlined image as its own asset.'
+      }
+    ]
   }
 };

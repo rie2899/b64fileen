@@ -224,6 +224,14 @@
     "updated": "2026-10-29"
   },
   {
+    "id": "base64-data-uri-pitfalls",
+    "path": "/base64-data-uri-pitfalls/",
+    "html": "base64-data-uri-pitfalls/index.html",
+    "input": "pitfalls",
+    "priority": "0.7",
+    "updated": "2026-10-29"
+  },
+  {
     "id": "404",
     "path": "/404.html",
     "html": "404.html",

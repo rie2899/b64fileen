@@ -1200,6 +1200,7 @@ const SHORT_LABEL: Record<string, string> = {
   'base64-to-webp': 'Base64 to WebP',
   'base64-to-woff2': 'Base64 to WOFF2',
   developers: 'Developers',
+  'base64-data-uri-pitfalls': 'Data URI pitfalls',
   'base64-to-mp3': 'Base64 to MP3',
   'base64-to-txt': 'Base64 to TXT',
   'data-url': 'Data URL',
@@ -1245,6 +1246,7 @@ const PAGE_GROUP: Record<string, PageGroup> = {
   'base64-vs-encryption': 'guide',
   'how-to-decode-base64-in-javascript': 'guide',
   developers: 'guide',
+  'base64-data-uri-pitfalls': 'guide',
   about: 'info',
   privacy: 'info',
   terms: 'info'
