@@ -200,6 +200,30 @@
     "updated": "2026-10-29"
   },
   {
+    "id": "base64-to-webp",
+    "path": "/base64-to-webp/",
+    "html": "base64-to-webp/index.html",
+    "input": "toWebp",
+    "priority": "0.8",
+    "updated": "2026-10-29"
+  },
+  {
+    "id": "base64-to-woff2",
+    "path": "/base64-to-woff2/",
+    "html": "base64-to-woff2/index.html",
+    "input": "toWoff2",
+    "priority": "0.7",
+    "updated": "2026-10-29"
+  },
+  {
+    "id": "developers",
+    "path": "/developers/",
+    "html": "developers/index.html",
+    "input": "developers",
+    "priority": "0.7",
+    "updated": "2026-10-29"
+  },
+  {
     "id": "404",
     "path": "/404.html",
     "html": "404.html",

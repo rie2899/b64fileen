@@ -125,6 +125,16 @@ export function detectFileType(bytes: Uint8Array): DetectedFileType | null {
     return { mime: 'application/x-msdownload', extension: 'exe', label: 'Windows executable', category: 'binary' };
   if (startsWith(bytes, [0x7f, 0x45, 0x4c, 0x46]))
     return { mime: 'application/x-elf', extension: 'elf', label: 'ELF executable', category: 'binary' };
+  if (startsWith(bytes, ascii('wOF2')))
+    return { mime: 'font/woff2', extension: 'woff2', label: 'WOFF2 font', category: 'binary' };
+  if (startsWith(bytes, ascii('wOFF')))
+    return { mime: 'font/woff', extension: 'woff', label: 'WOFF font', category: 'binary' };
+  if (startsWith(bytes, ascii('OTTO')))
+    return { mime: 'font/otf', extension: 'otf', label: 'OpenType font (CFF)', category: 'binary' };
+  if (startsWith(bytes, [0x00, 0x01, 0x00, 0x00]) || startsWith(bytes, ascii('true')))
+    return { mime: 'font/ttf', extension: 'ttf', label: 'TrueType font', category: 'binary' };
+  if (startsWith(bytes, ascii('ttcf')))
+    return { mime: 'font/collection', extension: 'ttc', label: 'TrueType collection', category: 'binary' };
   if (startsWith(bytes, ascii('SQLite format 3')))
     return { mime: 'application/x-sqlite3', extension: 'db', label: 'SQLite database', category: 'binary' };
 

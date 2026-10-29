@@ -223,5 +223,222 @@ URL.revokeObjectURL(url);</code></pre>
         a: 'Only if you look at the first bytes. A PDF starts with <code>%PDF</code>, a PNG with the byte sequence <code>89 50 4E 47</code>, a ZIP-based format such as DOCX with <code>PK</code>. The Base64 text itself carries no type information unless it is wrapped in a data URL.'
       }
     ]
+  },
+
+  'base64-to-webp': {
+    title: 'Base64 to WebP — Decode a Base64 WebP Image Online',
+    desc: 'Paste Base64 WebP data and get a .webp file back. Spots the RIFF/WEBP header, strips the data:image/webp prefix, recovers truncated copies, and warns when inlining the image is the wrong call.',
+    h1: 'Base64 to WebP Converter',
+    answer:
+      'Paste Base64 and get a WebP image back. The tool checks the RIFF header and the WEBP marker at byte 8 before handing the file over, so a truncated or mislabelled string is reported instead of being saved as a broken image. A data:image/webp;base64, prefix is stripped automatically.',
+    mode: 'to-file',
+    quick: [
+      'WebP files start with <code>RIFF</code> and carry <code>WEBP</code> at byte 8',
+      'A <code>data:image/webp;base64,</code> prefix is not part of the data',
+      'Base64 adds about 33 percent on top of the image size',
+      'Files are decoded in the browser — nothing is uploaded',
+      'For images over ~10 KB, serve the .webp file instead of inlining it'
+    ],
+    sections: [
+      {
+        h2: 'Where Base64 WebP turns up',
+        html: `<ul>
+          <li><strong>CSS data URIs</strong> — <code>background-image: url("data:image/webp;base64,...")</code> in a build step that inlines small assets</li>
+          <li><strong>JSON from an image pipeline</strong> — resizing and conversion services often return the result as a Base64 field</li>
+          <li><strong>Single-file HTML exports</strong> — a report or a demo saved as one shareable file has to carry its images as text</li>
+          <li><strong>API previews</strong> — a thumbnail field next to the real download URL</li>
+        </ul>`
+      },
+      {
+        h2: 'How the tool knows it is WebP',
+        html: `<p>A WebP file is a RIFF container: the first four bytes are <code>RIFF</code>, four bytes of length follow, then <code>WEBP</code> at offset 8. The decoder checks both positions. That matters because a JPEG or PNG pasted as "webp" decodes perfectly well as bytes — the file only fails when a browser refuses to render it.</p>
+        <p>If the string starts with <code>data:image/webp;base64,</code>, the prefix is removed before decoding. If the length is not a multiple of four, the data was almost certainly cut off in transit — the tool reports that rather than writing a file that will not open.</p>`
+      },
+      {
+        h2: 'When inlining is the right call — and when it is not',
+        html: `<p>Inlining removes one HTTP request, which is worth something for a small icon or a logo that appears above the fold. Past roughly 10 KB it stops being a win: the Base64 text is 33 percent larger than the binary, it cannot be cached separately, and it blocks the CSS or HTML that carries it. Google's own guidance is to inline only assets small enough that the request cost exceeds the transfer cost.</p>
+        <p>WebP makes the trade better than PNG did, because the same picture is typically 25–35 percent smaller to begin with. But the same rule applies: a hero image belongs in a file with a cacheable URL, not in a data URI.</p>`
+      },
+      {
+        h2: 'After you have the file',
+        html: `<p>Save the <code>.webp</code> and reference it by URL. Every current browser supports WebP; the format only needs a fallback if you still support very old Safari, and even there the practical answer is <code>&lt;picture&gt;</code> with a JPEG source rather than an inline fallback.</p>
+        <p>To go the other direction, use <a href="/image-to-base64/">image to Base64</a>. To check what a string actually contains when the type is unknown, paste it into the <a href="/base64-to-file/">general decoder</a> — it identifies the format from the header bytes.</p>`
+      }
+    ],
+    faqs: [
+      {
+        q: 'Why does my file open as a blank image?',
+        a: 'Either the data was truncated (check that the length is a multiple of four) or the bytes are not actually WebP despite the label. Decode it and look at the first four bytes: <code>RIFF</code> means WebP or WAV, and only the marker at offset 8 tells you which.'
+      },
+      {
+        q: 'Is a Base64 WebP bigger than the original?',
+        a: 'Yes — about 33 percent larger. Four characters encode three bytes, always. The image itself is not re-encoded, so quality is untouched.'
+      },
+      {
+        q: 'Can I convert WebP to PNG here?',
+        a: 'Not directly. This tool restores the original bytes. To change format, decode to <code>.webp</code> first and convert with an image editor or a command-line tool such as <code>cwebp</code>/<code>dwebp</code>.'
+      }
+    ]
+  },
+
+  'base64-to-woff2': {
+    title: 'Base64 to WOFF2 — Decode a Base64 Font File',
+    desc: 'Turn Base64 font data back into a .woff2 file. Detects the wOF2 signature, separates WOFF from WOFF2 and TTF, and explains why inlining fonts in CSS is usually a mistake.',
+    h1: 'Base64 to WOFF2 Converter',
+    answer:
+      'Paste Base64 and get the font file back. WOFF2 files begin with the four bytes <code>wOF2</code>, WOFF with <code>wOFF</code> — the tool reads that signature, so you find out immediately whether the string is really WOFF2, an older WOFF, or a raw TrueType file with the wrong label.',
+    mode: 'to-file',
+    quick: [
+      'WOFF2 starts with <code>wOF2</code>; WOFF starts with <code>wOFF</code>',
+      'Both are compressed containers — the decoded file is not a plain font table dump',
+      '<code>data:font/woff2;base64,</code> prefixes are stripped automatically',
+      'Inlining a full font in CSS blocks rendering and defeats caching',
+      'Check the font licence before embedding it anywhere'
+    ],
+    sections: [
+      {
+        h2: 'Where Base64 WOFF2 appears',
+        html: `<ul>
+          <li><strong>CSS <code>@font-face</code> blocks</strong> — the classic <code>src: url(data:font/woff2;base64,...)</code> pattern, usually produced by a build tool or copied from a font CDN</li>
+          <li><strong>Single-file HTML</strong> — an offline demo or a design mockup that must render identically with no external requests</li>
+          <li><strong>Email templates</strong> — where external font files are blocked, so some senders inline them (rarely a good idea, see below)</li>
+          <li><strong>App bundles and config files</strong> — a mobile build that ships one font as a JSON string field</li>
+        </ul>`
+      },
+      {
+        h2: 'The four signatures worth knowing',
+        html: `<p>The first four bytes tell you what you have, and they are easy to confuse:</p>
+        <ul>
+          <li><code>wOF2</code> — WOFF2, Brotli-compressed, the format you actually want on the web</li>
+          <li><code>wOFF</code> — WOFF 1, zlib-compressed, the older format</li>
+          <li><code>OTTO</code> — OpenType with CFF outlines (often a <code>.otf</code>)</li>
+          <li><code>00 01 00 00</code> or <code>true</code> — raw TrueType</li>
+        </ul>
+        <p>A string labelled "woff2" that starts with <code>00 01 00 00</code> is a plain TTF: it will still work in a browser, but it is several times larger than the same font recompressed to WOFF2.</p>`
+      },
+      {
+        h2: 'Why inlining a font is usually wrong',
+        html: `<p>A font file is the largest thing most sites inline. A single Latin subset is 15–30 KB; a full family can be hundreds. Base64 adds another 33 percent, the CSS that carries it cannot finish downloading until the whole string has arrived, and because the data lives inside the stylesheet it is re-sent with every cache miss on that stylesheet instead of being cached as its own file.</p>
+        <p>The exceptions are narrow: a tiny icon font under a few KB, or a genuinely single-file artifact that must work offline. Everything else is better as a separate <code>.woff2</code> with <code>font-display: swap</code> and a long cache header.</p>`
+      },
+      {
+        h2: 'Licensing is the part people skip',
+        html: `<p>Most commercial fonts are licensed per use, and embedding the file in CSS is a distribution. Open-licensed fonts (OFL, Apache) permit it with attribution rules; paid desktop licences often do not cover web embedding at all. If the Base64 came from a template or a purchased theme, the licence travels with the font file, not with the CSS you found it in.</p>
+        <p>To encode a font you own, use <a href="/file-to-base64/">file to Base64</a>. To identify an unknown Base64 blob, the <a href="/base64-to-file/">general decoder</a> reads the header for you.</p>`
+      }
+    ],
+    faqs: [
+      {
+        q: 'The decoded file will not load as a font — why?',
+        a: 'Check the signature first. A <code>.woff2</code> extension on a file that starts with <code>00 01 00 00</code> is a TTF, and some servers refuse to serve it under the wrong MIME type. Rename it to .ttf, or recompress it to WOFF2.'
+      },
+      {
+        q: 'Can I convert WOFF2 back to TTF here?',
+        a: 'No — this page restores the bytes exactly as they were encoded. WOFF2 is a Brotli-compressed wrapper, so converting it to TTF needs a font tool such as <code>woff2_decompress</code> or <code>fonttools</code>.'
+      },
+      {
+        q: 'Does Base64 change the font quality?',
+        a: 'No. Encoding is lossless and reversible; the bytes are identical. Only the size changes, upward by about a third.'
+      }
+    ]
+  },
+
+  developers: {
+    title: 'Developers — Run Base64 Conversion Without a Server',
+    desc: 'Copy-paste Base64 code for browsers, workers and Node, plus magic-byte detection. Everything on this site runs client-side: no upload, no API key, no rate limit.',
+    h1: 'For Developers',
+    answer:
+      'Everything on this site runs in the browser: files are decoded locally and never uploaded, so there is no API key, no rate limit and nothing to sign up for. Below are the exact calls the tool uses — copy them into your own project, or open DevTools on any page here and read the source.',
+    mode: 'text',
+    quick: [
+      'No upload: the file never leaves the machine it is opened on',
+      'No API key, no quota, no account',
+      'Browser text: <code>TextDecoder</code> over <code>atob</code> bytes — not bare <code>atob</code>',
+      'Node: <code>Buffer.from(value, "base64")</code>',
+      'Type detection: read the magic bytes, do not trust the extension'
+    ],
+    sections: [
+      {
+        h2: 'Decode text (browser)',
+        html: `<pre><code>function decodeBase64Text(value) {
+  const clean = value.replace(/^data:[^;]+;base64,/, '').replace(/\\s+/g, '');
+  const standard = clean.replace(/-/g, '+').replace(/_/g, '/');
+  const padded = standard + '='.repeat((4 - (standard.length % 4)) % 4);
+  const bytes = Uint8Array.from(atob(padded), (c) =&gt; c.charCodeAt(0));
+  return new TextDecoder('utf-8').decode(bytes);
+}</code></pre>
+        <p>Three details that break naive implementations: strip the <code>data:</code> prefix, normalise the URL-safe alphabet, restore the padding. Bare <code>atob</code> on UTF-8 text returns mojibake — see <a href="/how-to-decode-base64-in-javascript/">the JavaScript guide</a>.</p>`
+      },
+      {
+        h2: 'Decode to bytes, not text',
+        html: `<p>If the payload is a file, never go through a string. Convert straight to a typed array and build a Blob:</p>
+        <pre><code>function decodeBase64Bytes(value) {
+  const clean = value.replace(/^data:[^;]+;base64,/, '').replace(/\\s+/g, '');
+  const bin = atob(clean);
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i &lt; bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return bytes;
+}
+
+const blob = new Blob([bytes], { type: mime });
+const url = URL.createObjectURL(blob);</code></pre>
+        <p>In Node the same thing is one line: <code>Buffer.from(value, 'base64')</code> — and pass that buffer straight to <code>fs.writeFile</code>, without a UTF-8 round trip.</p>`
+      },
+      {
+        h2: 'Detect the file type from magic bytes',
+        html: `<p>An extension is a claim; the first bytes are evidence. This is the check this site runs before it offers a download:</p>
+        <pre><code>const SIGNATURES = [
+  { mime: 'image/png',  ext: 'png',  bytes: [0x89, 0x50, 0x4e, 0x47] },
+  { mime: 'image/jpeg', ext: 'jpg',  bytes: [0xff, 0xd8, 0xff] },
+  { mime: 'image/webp', ext: 'webp', bytes: [0x52, 0x49, 0x46, 0x46], also: { at: 8, bytes: [0x57, 0x45, 0x42, 0x50] } },
+  { mime: 'application/pdf', ext: 'pdf', bytes: [0x25, 0x50, 0x44, 0x46] },
+  { mime: 'font/woff2', ext: 'woff2', bytes: [0x77, 0x4f, 0x46, 0x32] },
+  { mime: 'application/zip', ext: 'zip', bytes: [0x50, 0x4b, 0x03, 0x04] }
+];
+
+function matches(bytes, sig) {
+  if (!sig.every((b, i) =&gt; bytes[i] === b)) return false;
+  if (!sig.also) return true;
+  return sig.also.bytes.every((b, i) =&gt; bytes[sig.also.at + i] === b);
+}
+
+const type = SIGNATURES.find((s) =&gt; matches(bytes, s.bytes)) ?? null;</code></pre>
+        <p>WebP is the one that needs the second check: <code>RIFF</code> alone could be WAV or AVI, and only the marker at offset 8 tells them apart.</p>`
+      },
+      {
+        h2: 'Large files without freezing the page',
+        html: `<p>Decoding happens on the main thread unless you move it. For files above a few megabytes, a worker keeps the UI responsive:</p>
+        <pre><code>const worker = new Worker('/b64-worker.js');
+worker.postMessage({ base64 });
+worker.onmessage = (e) =&gt; {
+  const bytes = new Uint8Array(e.data.buffer);
+  // ...
+};</code></pre>
+        <p>Two more traps: <code>String.fromCharCode(...bytes)</code> overflows the argument limit on large inputs (loop instead), and <code>FileReader.readAsDataURL</code> is convenient but materialises the whole Base64 string in memory — for very large files, read as an <code>ArrayBuffer</code> and encode in chunks.</p>`
+      },
+      {
+        h2: 'What this site does and does not offer',
+        html: `<p><strong>Offers</strong>: client-side conversion for any file up to 100 MB, the same code paths documented above, and a documented list of what it recognises — see the <a href="/base64-to-file/">decoder</a>.</p>
+        <p><strong>Does not offer</strong>: a hosted HTTP API. There is no endpoint to call, because the design goal is that your file never leaves your machine. If you need server-side conversion, the functions above run unchanged in Node, Bun or a Cloudflare Worker.</p>`
+      }
+    ],
+    faqs: [
+      {
+        q: 'Is there a JSON API endpoint?',
+        a: 'No. Adding one would mean uploading the file to a server, which is the thing this site exists to avoid. The code on this page can be deployed to your own worker in an afternoon.'
+      },
+      {
+        q: 'Can I use these snippets commercially?',
+        a: 'Yes — they are ordinary standard-library calls with no licensing attached. Attribution is not required.'
+      },
+      {
+        q: 'Why does the tool cap files at 100 MB?',
+        a: 'Browser memory. The Base64 string, the decoded bytes and the Blob can coexist briefly, so a 100 MB file can need several hundred megabytes of headroom while it is being processed.'
+      },
+      {
+        q: 'How do I know nothing is uploaded?',
+        a: 'Open DevTools → Network, switch to the Fetch/XHR filter and paste a file. No request carries the payload. The site is a static bundle; there is no backend to receive it.'
+      }
+    ]
   }
 };
