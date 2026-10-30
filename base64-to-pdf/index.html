@@ -12,7 +12,7 @@
     <script>
       (function () {
         try {
-          var t = localStorage.getItem('b64theme');
+          var t = localStorage.getItem('b64file-theme');
           if (t !== 'dark' && t !== 'light') {
             t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
           }
