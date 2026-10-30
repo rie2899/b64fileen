@@ -70,10 +70,14 @@ describe('page registry consistency', () => {
     // Other .txt files (robots.txt and friends) also live in public/, and a loose
     // [A-Za-z0-9-] pattern would match them — so match the 32-hex shape this project generates.
     const keys = readdirSync(resolve(root, 'public')).filter((f) => /^[0-9a-f]{32}\.txt$/.test(f));
-    expect(keys.length, 'public/ should contain exactly one <key>.txt').toBe(1);
-    const name = keys[0].replace(/\.txt$/, '');
-    const content = readFileSync(resolve(root, 'public', keys[0]), 'utf8').trim();
-    expect(content, 'the key file content must equal its file name or Bing rejects the check').toBe(name);
+    expect(keys.length, 'public/ should contain at least one <key>.txt').toBeGreaterThanOrEqual(1);
+    for (const f of keys) {
+      const name = f.replace(/\.txt$/, '');
+      const content = readFileSync(resolve(root, 'public', f), 'utf8').trim();
+      // Several keys are legitimate (a host may publish more than one while rotating),
+      // but each must be self-consistent or Bing rejects the check.
+      expect(content, 'the key file content must equal its file name or Bing rejects the check').toBe(name);
+    }
   });
 
   it('link graph: every page has ≤5 outgoing and ≥5 incoming internal links', () => {
