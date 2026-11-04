@@ -1433,6 +1433,16 @@ function jsonLd(page: PageId): unknown[] {
       inLanguage: 'en',
       description: 'Browser-only Base64 tools: decode Base64 to a file, encode files to Base64, and convert text both ways.'
     });
+    // Organization：给 AI 搜索一个「这个站是谁」的实体锚点。
+    // WebSite 只说明「有个站」，实体信息（名字/logo/做什么）要靠 Organization 才传得出去。
+    graph.push({
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: BRAND,
+      url: absoluteUrl('/') || '/',
+      logo: absoluteUrl('/og-image.png') || '/og-image.png',
+      description: 'Free browser-only Base64 converter: files never leave your device.'
+    });
   }
 
   graph.push({

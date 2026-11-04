@@ -20,7 +20,32 @@ if (!readdirSync('public').some((f) => KEY_RE.test(f))) {
 
 writeFileSync(
   'public/robots.txt',
-  `User-agent: *\nAllow: /\n\nSitemap: ${siteUrl}/sitemap.xml\n`
+  // AI 搜索爬虫显式放行（GEO）：`*` 虽已允许，但显式声明是明确授权信号，
+  // 也防止以后加规则误伤。ChatGPT 搜索走 OAI-SearchBot，用户让它开网页走 ChatGPT-User。
+  `User-agent: *
+Allow: /
+
+# --- AI 搜索与生成式引擎爬虫：显式放行 ---
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: ${siteUrl}/sitemap.xml
+`
 );
 
 writeFileSync(

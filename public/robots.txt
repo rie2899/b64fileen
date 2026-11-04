@@ -1,4 +1,23 @@
 User-agent: *
 Allow: /
 
+# --- AI 搜索与生成式引擎爬虫：显式放行 ---
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
 Sitemap: https://b64file.com/sitemap.xml
