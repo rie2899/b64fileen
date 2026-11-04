@@ -7,7 +7,7 @@ import type { PageContent } from './static-pages';
 export const guidePages: Record<string, PageContent> = {
   'what-is-base64': {
     title: 'What Is Base64? Encoding Explained with a Worked Example',
-    desc: 'Base64 turns binary data into plain ASCII text so it survives channels that mangle anything but text. How the 3-to-4 byte mapping works, why it adds 33 percent, and what it does not protect.',
+    desc: 'Base64 turns binary into plain ASCII so it survives text-only channels. How the 3-to-4 byte mapping works, why it adds 33%, and what it does not protect.',
     h1: 'What Is Base64?',
     answer:
       'Base64 is an encoding that rewrites binary data using only 64 printable ASCII characters. Three input bytes become four output characters, so the data grows by about 33 percent. It exists so that files and images can travel through systems that only accept text — email, JSON fields, URLs, config files. It is not encryption: anyone who sees a Base64 string can turn it back into the original bytes without a key.',
@@ -69,7 +69,7 @@ export const guidePages: Record<string, PageContent> = {
 
   'base64-vs-encryption': {
     title: 'Base64 vs Encryption: Why Encoding Is Not Protection',
-    desc: 'Base64 and encryption both turn readable data into something unreadable-looking, and only one of them protects it. The difference in one test, the four places the confusion causes real leaks, and what to use instead.',
+    desc: 'Base64 and encryption both make data look unreadable, but only one protects it. The one test that tells them apart, and the leaks the confusion causes.',
     h1: 'Base64 vs Encryption',
     answer:
       'Base64 is an encoding: a fixed, public transformation that anyone can reverse, with no key involved. Encryption is a transformation that requires a key to reverse, and is the only one of the two that hides data. They are often confused because both produce unreadable-looking text — and because encryption output is usually Base64-encoded so it can be stored as text. Encoding is how encrypted bytes travel; it is not what protects them.',
@@ -133,7 +133,7 @@ export const guidePages: Record<string, PageContent> = {
 
   'how-to-decode-base64-in-javascript': {
     title: 'How to Decode Base64 in JavaScript (Browser and Node)',
-    desc: 'atob, TextDecoder, Buffer and Base64URL — the correct decode call for browsers and Node, why atob mangles non-ASCII text, and how to turn a Base64 string back into a downloadable file.',
+    desc: 'atob, TextDecoder, Buffer and Base64URL — the correct decode call for browsers and Node, why atob mangles non-ASCII text, and how to save it as a file.',
     h1: 'Decoding Base64 in JavaScript',
     answer:
       'In a browser, decode with <code>atob</code> for byte strings and <code>Uint8Array</code> plus <code>TextDecoder</code> when the content is UTF-8 — <code>atob</code> alone garbles non-ASCII text. In Node, use <code>Buffer.from(value, "base64").toString("utf8")</code>. For Base64URL, convert <code>-</code> and <code>_</code> back to <code>+</code> and <code>/</code> and restore the padding first.',
@@ -227,7 +227,7 @@ URL.revokeObjectURL(url);</code></pre>
 
   'base64-to-webp': {
     title: 'Base64 to WebP — Decode a Base64 WebP Image Online',
-    desc: 'Paste Base64 WebP data and get a .webp file back. Spots the RIFF/WEBP header, strips the data:image/webp prefix, recovers truncated copies, and warns when inlining the image is the wrong call.',
+    desc: 'Paste Base64 WebP data and get a .webp file back. Spots the RIFF/WEBP header, strips the data: prefix, and recovers truncated copies.',
     h1: 'Base64 to WebP Converter',
     answer:
       'Paste Base64 and get a WebP image back. The tool checks the RIFF header and the WEBP marker at byte 8 before handing the file over, so a truncated or mislabelled string is reported instead of being saved as a broken image. A data:image/webp;base64, prefix is stripped automatically.',
@@ -283,7 +283,7 @@ URL.revokeObjectURL(url);</code></pre>
 
   'base64-to-woff2': {
     title: 'Base64 to WOFF2 — Decode a Base64 Font File',
-    desc: 'Turn Base64 font data back into a .woff2 file. Detects the wOF2 signature, separates WOFF from WOFF2 and TTF, and explains why inlining fonts in CSS is usually a mistake.',
+    desc: 'Turn Base64 font data back into a .woff2 file. Detects the wOF2 signature, tells WOFF from WOFF2 and TTF, and explains why inlining fonts usually fails.',
     h1: 'Base64 to WOFF2 Converter',
     answer:
       'Paste Base64 and get the font file back. WOFF2 files begin with the four bytes <code>wOF2</code>, WOFF with <code>wOFF</code> — the tool reads that signature, so you find out immediately whether the string is really WOFF2, an older WOFF, or a raw TrueType file with the wrong label.',
@@ -345,7 +345,7 @@ URL.revokeObjectURL(url);</code></pre>
 
   developers: {
     title: 'Developers — Run Base64 Conversion Without a Server',
-    desc: 'Copy-paste Base64 code for browsers, workers and Node, plus magic-byte detection. Everything on this site runs client-side: no upload, no API key, no rate limit.',
+    desc: 'Copy-paste Base64 code for browsers, workers and Node, plus magic-byte detection. All client-side: no upload, no API key, no rate limit.',
     h1: 'For Developers',
     answer:
       'Everything on this site runs in the browser: files are decoded locally and never uploaded, so there is no API key, no rate limit and nothing to sign up for. Below are the exact calls the tool uses — copy them into your own project, or open DevTools on any page here and read the source.',
@@ -443,7 +443,7 @@ worker.onmessage = (e) =&gt; {
   },
   'base64-data-uri-pitfalls': {
     title: 'Inline Base64: Five Things That Break It (and Fixes)',
-    desc: 'Data URIs look like a free optimisation and are usually not. Five failure modes — the 33% tax, MIME mismatches, truncation, UTF-8 mojibake and CSP — with the check that catches each one.',
+    desc: 'Data URIs look like a free win and usually are not. Five failure modes — the 33% tax, MIME mismatches, truncation, mojibake and CSP — and how to catch each.',
     h1: 'Five Ways Inlined Base64 Breaks',
     answer:
       'Inlining Base64 fails in five predictable places: the payload is a third larger than the file it replaces and stops being cacheable; the declared MIME type overrides the real bytes; line breaks and stripped padding break the decode; <code>atob</code> mangles anything that is not Latin-1; and a Content-Security-Policy without <code>data:</code> blocks the resource silently. Each has a one-line check.',
