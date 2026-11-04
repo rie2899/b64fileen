@@ -442,7 +442,7 @@ worker.onmessage = (e) =&gt; {
     ]
   },
   'base64-data-uri-pitfalls': {
-    title: 'Five Things That Break When You Inline Base64 (and How to Check Each One)',
+    title: 'Inline Base64: Five Things That Break It (and Fixes)',
     desc: 'Data URIs look like a free optimisation and are usually not. Five failure modes — the 33% tax, MIME mismatches, truncation, UTF-8 mojibake and CSP — with the check that catches each one.',
     h1: 'Five Ways Inlined Base64 Breaks',
     answer:

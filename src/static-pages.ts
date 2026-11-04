@@ -36,7 +36,7 @@ export const pagePaths: Record<PageId, string> = Object.fromEntries(
 export const pageData: Record<PageId, PageContent> = {
   home: {
     title: 'Base64 to File & File to Base64 — Free Online Converter',
-    desc: 'Free browser-based Base64 tools: decode Base64 into a real file, encode files to Base64, and convert text both ways. Prefixes and padding are repaired automatically — just paste.',
+    desc: 'Free browser-based Base64 tools: decode Base64 into a real file, encode files to Base64, and convert text both ways. Bad prefixes and padding fixed for you.',
     h1: 'Base64 to File · File to Base64',
     answer:
       'Paste it in. Raw Base64, a full data: URL, or an entire JSON API response — the tool inspects the input first, repairs what it can, and tells you exactly where the data breaks. Images, PDFs and archives are all recognized. The result appears as you paste; there is no button to press.',
@@ -88,7 +88,7 @@ export const pageData: Record<PageId, PageContent> = {
 
   'base64-to-file': {
     title: 'Base64 to File Converter — Decode Base64 Online (Free)',
-    desc: 'Decode Base64 back into a real file: PDF, image, Office document, ZIP or audio. The file type is detected from the data itself, and broken input is repaired or explained.',
+    desc: 'Decode Base64 back into a real file — PDF, image, Office, ZIP or audio. Type is detected from the data itself; broken input is repaired or explained.',
     h1: 'Base64 to File Converter',
     answer:
       'Paste Base64 in and get a real file back. Missing padding, stray line breaks and data: URL prefixes are cleaned up for you, and the original file type is recovered from the file header — you do not need to know what the file was.',
@@ -133,7 +133,7 @@ export const pageData: Record<PageId, PageContent> = {
 
   'file-to-base64': {
     title: 'File to Base64 Converter — Encode Any File Online',
-    desc: 'Encode a file to Base64 in the browser: images, PDF, Office documents, archives or audio. Output as raw Base64, a data: URL, or URL-safe Base64 with 76-character wrapping.',
+    desc: 'Encode a file to Base64 in the browser: images, PDF, Office, archives or audio. Output raw Base64, a data: URL, or URL-safe with 76-char wrapping.',
     h1: 'File to Base64 Converter',
     answer:
       'Drop a file in and get Base64 out — no upload, since the file is read locally in your browser. Pick the flavour you need: raw Base64, a ready-to-paste data: URL, or URL-safe Base64 for tokens and URLs. Large files are encoded on a background thread.',
@@ -171,7 +171,7 @@ export const pageData: Record<PageId, PageContent> = {
 
   'base64-to-image': {
     title: 'Base64 to Image — Decode Base64 to PNG/JPG Online',
-    desc: 'Turn a Base64 string back into an image and preview it on the page. Handles data: URL prefixes, missing padding and line breaks, and detects PNG, JPEG, GIF, WebP and SVG.',
+    desc: 'Turn Base64 back into an image and preview it on the page. Handles data: URL prefixes, missing padding and line breaks; detects PNG, JPEG, GIF, WebP, SVG.',
     h1: 'Base64 to Image Converter',
     answer:
       'Paste a Base64 image string and see it immediately. The data: URL prefix is stripped, padding is repaired, and the format is read from the file header — then download the image, or copy it as a data URL to reuse elsewhere.',
@@ -257,7 +257,7 @@ export const pageData: Record<PageId, PageContent> = {
 
   'base64-to-pdf': {
     title: 'Base64 to PDF — Decode a Base64 PDF Online',
-    desc: 'Decode Base64 into a real PDF file in your browser. Handles data: URL prefixes and broken padding, verifies the %PDF header, and tells you when the data is truncated.',
+    desc: 'Decode Base64 into a real PDF in your browser. Handles data: URL prefixes and broken padding, verifies the %PDF header, and flags truncated data.',
     h1: 'Base64 to PDF Converter',
     answer:
       'Paste the Base64 and get a PDF back. The tool checks for a valid %PDF header before handing it over, so you know immediately whether the data is intact instead of opening a file that turns out to be corrupt.',
@@ -320,7 +320,7 @@ export const pageData: Record<PageId, PageContent> = {
 
   'base64-decode-errors': {
     title: 'Base64 Decode Error? 5 Causes and How to Fix Them',
-    desc: 'Invalid character, bad padding, truncated data, Base64URL misuse, forgotten data: prefix — the five reasons Base64 decoding fails, what each error message means, and how to fix it fast.',
+    desc: 'Invalid character, bad padding, truncated data, Base64URL misuse, forgotten data: prefix — the five reasons Base64 decoding fails and how to fix each one.',
     h1: 'Base64 Decode Errors: Causes and Fixes',
     answer:
       'Almost every Base64 failure is one of five things: an illegal character, missing or extra padding, truncated data, Base64URL and standard alphabets mixed, or a data: URL prefix left in place. Each one has a distinct error message — here is what they mean and the fastest way to fix it.',
@@ -416,7 +416,7 @@ export const pageData: Record<PageId, PageContent> = {
 
   'base64-to-excel': {
     title: 'Base64 to Excel (.xlsx) Converter — Decode Online',
-    desc: 'Decode Base64 into an Excel workbook. Recognizes .xlsx and macro-enabled .xlsm from the OOXML structure, and explains why the contents cannot be previewed here.',
+    desc: 'Decode Base64 into an Excel workbook. Recognizes .xlsx and macro-enabled .xlsm from the OOXML structure, and explains why contents cannot be previewed.',
     h1: 'Base64 to Excel Converter',
     answer:
       'Paste the Base64 and download the spreadsheet. Both .xlsx and macro-enabled .xlsm are recognized from the archive structure; the file is restored byte for byte, so formulas, styles and sheets all survive.',
@@ -453,7 +453,7 @@ export const pageData: Record<PageId, PageContent> = {
 
   'json-to-file': {
     title: 'Extract Base64 Files from JSON — API Response Decoder',
-    desc: 'Paste an API response and pull out every Base64 file inside it. Reads fileContent and fileName fields, restores each attachment with its original name, and recovers partial copies.',
+    desc: 'Paste an API response and pull out every Base64 file inside it. Reads fileContent and fileName fields, restores each attachment with its original name.',
     h1: 'Extract Base64 Files from JSON',
     answer:
       'Paste the whole API response instead of picking strings out by hand. The tool walks the JSON, finds every Base64 payload, matches it with its file name, and hands you each file separately — including when the response was copied incompletely.',
@@ -496,7 +496,7 @@ export const pageData: Record<PageId, PageContent> = {
 
   'base64-to-text': {
     title: 'Base64 to Text Decoder — Read Base64 as Plain Text',
-    desc: 'Decode Base64 into readable text, including UTF-8 and multibyte characters. Explains the three reasons decoded text comes out as mojibake, and how to tell text apart from a file payload.',
+    desc: 'Decode Base64 into readable text, including UTF-8 and multibyte characters. Explains why decoded text turns into mojibake and how to tell text from a file.',
     h1: 'Base64 to Text Decoder',
     answer:
       'Paste Base64 and read the text it carries. UTF-8 support is built in, so accented characters, Chinese, Japanese and emoji survive the round trip — and when the output makes no sense as text, that itself is the clue that you are holding a file rather than a string.',
@@ -550,7 +550,7 @@ export const pageData: Record<PageId, PageContent> = {
 
   'base64-to-pptx': {
     title: 'Base64 to PPTX (PowerPoint) Converter — Decode Online',
-    desc: 'Decode Base64 into a PowerPoint presentation. Recognizes .pptx from the OOXML archive, keeps slides, fonts and embedded media intact, and covers legacy .ppt files.',
+    desc: 'Decode Base64 into a PowerPoint presentation. Recognizes .pptx from the OOXML archive, keeps slides, fonts and embedded media intact.',
     h1: 'Base64 to PPTX Converter',
     answer:
       'Paste the Base64 and get the presentation back. Slides, notes, embedded fonts and media are restored exactly — the bytes are not rewritten — so anything that opened the original file opens this one.',
@@ -587,7 +587,7 @@ export const pageData: Record<PageId, PageContent> = {
 
   base64url: {
     title: 'Base64URL Decoder — URL-safe Base64 Converter',
-    desc: 'Decode and encode URL-safe Base64 (RFC 4648 §5): the - _ alphabet with padding stripped. Handles JWT segments, query parameters and filenames, and accepts both alphabets.',
+    desc: 'Decode and encode URL-safe Base64 (RFC 4648 §5): the - _ alphabet without padding. Handles JWT segments, query parameters and filenames.',
     h1: 'Base64URL · URL-safe Base64',
     answer:
       'Paste either flavour and it decodes: standard Base64 or URL-safe, with or without padding. URL-safe swaps <code>+</code> and <code>/</code> for <code>-</code> and <code>_</code> and drops the trailing <code>=</code>, which is exactly the form JWT segments use.',
@@ -640,7 +640,7 @@ export const pageData: Record<PageId, PageContent> = {
 
   'base64-to-svg': {
     title: 'Base64 to SVG Converter — Decode Inline SVG Images',
-    desc: 'Decode a Base64 SVG back into an editable vector file. Handles the data:image/svg+xml prefix, explains why SVG payloads are often not Base64 at all, and why external references break.',
+    desc: 'Decode a Base64 SVG back into an editable vector file. Handles the data:image/svg+xml prefix and explains why SVG payloads are often not Base64 at all.',
     h1: 'Base64 to SVG Converter',
     answer:
       'Paste the Base64 and get the .svg file back. Vector source stays editable text, so opening the result in an editor gives you the paths, groups and attributes intact rather than a flattened image.',
@@ -681,7 +681,7 @@ export const pageData: Record<PageId, PageContent> = {
 
   'base64-to-mp3': {
     title: 'Base64 to MP3 Converter — Decode Base64 Audio',
-    desc: 'Decode a Base64 audio payload back into an MP3 file. Recognises audio from frame headers rather than the file name, and warns about payload size before you commit.',
+    desc: 'Decode a Base64 audio payload back into an MP3 file. Recognises audio from frame headers, not the file name, and warns about payload size up front.',
     h1: 'Base64 to MP3 Converter',
     answer:
       'Paste the Base64 and download the audio file. The format is identified from the bytes themselves — an MP3 starts with an ID3 tag or a frame sync pattern — so a wrong or missing file name does not throw it off.',
@@ -762,7 +762,7 @@ export const pageData: Record<PageId, PageContent> = {
 
   'data-url': {
     title: 'Data URL Generator & Parser — data: URI to File',
-    desc: 'Build and parse data: URLs: turn a file into an inline data URI, or decode a data URL back into a file. Covers the three mistakes that break inline assets most often.',
+    desc: 'Build and parse data: URLs — turn a file into an inline data URI, or decode one back into a file. Covers the three mistakes that break inline assets.',
     h1: 'Data URL Generator & Parser',
     answer:
       'A data: URL is a complete file inside a strings — MIME type, encoding and bytes together, ready to paste into HTML or CSS with no separate request. Paste one here and you get the original file back; drop a file in and you get a data: URL out.',
@@ -805,7 +805,7 @@ export const pageData: Record<PageId, PageContent> = {
 
   'jwt-decode': {
     title: 'JWT Decoder — Read Header and Payload Safely',
-    desc: 'Decode a JSON Web Token in the browser to read its header and payload. Shows issued-at and expiry as readable dates, and is explicit that decoding is not verification.',
+    desc: 'Decode a JWT in the browser to read its header and payload. Shows issued-at and expiry as readable dates, and makes clear that decoding is not verification.',
     h1: 'JWT Decoder',
     answer:
       'Paste a token to read its header and payload as JSON. Nothing is uploaded, no signature check is attempted, and the tool keeps saying the thing that matters: reading a token proves nothing about whether it is authentic.',
@@ -891,7 +891,7 @@ export const pageData: Record<PageId, PageContent> = {
 
   about: {
     title: 'About — why this tool exists',
-    desc: 'A browser-only Base64 tool built because decoding a raw Base64 string should not require finding out what the data is first. Local processing, no accounts, no uploads.',
+    desc: 'A browser-only Base64 tool built because decoding raw Base64 should not require knowing what the data is first. Local processing, no accounts, no uploads.',
     h1: 'About',
     answer:
       'This site exists because decoding Base64 is usually the last step of a frustrating afternoon: the string is truncated, the padding is gone, the prefix is still attached, and you have no idea what the file was supposed to be. The point here is to make that step trivial.',
@@ -1378,13 +1378,13 @@ export function metaTags(page: PageId): string {
   const d = pageData[page] ?? pageData.home;
   const canonical = absoluteUrl(pagePaths[page] ?? '/');
   const ogImage = absoluteUrl('/og-image.png');
-  return `<title>${d.title}</title>
-    <meta name="description" content="${d.desc}" />
+  return `<title>${escapeHtml(d.title)}</title>
+    <meta name="description" content="${escapeHtml(d.desc)}" />
     <meta name="applicable-device" content="pc,mobile" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:site_name" content="${BRAND}" />
-    <meta property="og:title" content="${d.title}" />
-    <meta property="og:description" content="${d.desc}" />
+    <meta property="og:title" content="${escapeHtml(d.title)}" />
+    <meta property="og:description" content="${escapeHtml(d.desc)}" />
     <meta property="og:type" content="website" />
     ${canonical ? `<meta property="og:url" content="${canonical}" />` : ''}
     ${ogImage ? `<meta property="og:image" content="${ogImage}" />` : ''}
