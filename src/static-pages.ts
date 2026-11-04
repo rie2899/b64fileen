@@ -1401,8 +1401,20 @@ export function canonicalTag(page: PageId): string {
  * zh/en alternates. Google uses these to serve the right language version instead of
  * treating the two sites as duplicates, so keep them paired with the Chinese site.
  */
+/**
+ * 只有英文站存在的页面：中文站没有同路径页，声明 zh-CN 会指向 404，
+ * 而 hreflang 一旦有一侧落到 404，Google 整组忽略 —— 所以这类页什么都不声明。
+ */
+const NO_ZH_COUNTERPART = new Set<PageId>([
+  'what-is-base64',
+  'base64-vs-encryption',
+  'how-to-decode-base64-in-javascript',
+  'developers',
+  'base64-data-uri-pitfalls'
+]);
+
 export function hreflangTags(page: PageId): string {
-  if (page === '404') return '';
+  if (page === '404' || NO_ZH_COUNTERPART.has(page)) return '';
   const zhBase = ZH_SITE_URL.replace(/\/$/, '');
   const path = pagePaths[page] ?? '/';
   const en = absoluteUrl(path);
